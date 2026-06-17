@@ -33,7 +33,7 @@ export default function Hero({ guestName }: HeroProps) {
         
         {/* Floating Flower Patterns */}
         <motion.img
-          src="wedding-invitation/images/pattern/flower-1.webp"
+          src="/images/pattern/flower-1.webp"
           alt=""
           className="absolute top-[10%] left-[5%] w-16 opacity-80 z-20"
           initial={{ y: 0, rotate: 0 }}
@@ -46,7 +46,7 @@ export default function Hero({ guestName }: HeroProps) {
           }}
         />
         <motion.img
-          src="wedding-invitation/images/pattern/flower-2.webp"
+          src="/images/pattern/flower-2.webp"
           alt=""
           className="absolute top-[20%] right-[10%] w-20 opacity-80 z-20"
           initial={{ y: 0, rotate: 0 }}
@@ -60,7 +60,7 @@ export default function Hero({ guestName }: HeroProps) {
           }}
         />
         <motion.img
-          src="wedding-invitation/images/pattern/flower-3.webp"
+          src="/images/pattern/flower-3.webp"
           alt=""
           className="absolute bottom-[15%] left-[15%] w-24 opacity-80 z-20"
           initial={{ y: 0, rotate: 0 }}
@@ -74,7 +74,7 @@ export default function Hero({ guestName }: HeroProps) {
           }}
         />
         <motion.img
-          src="wedding-invitation/images/pattern/flower-1.webp"
+          src="/images/pattern/flower-1.webp"
           alt=""
           className="absolute top-[5%] right-[20%] w-12 opacity-70 z-20"
           initial={{ y: 0, rotate: 0 }}
@@ -88,7 +88,7 @@ export default function Hero({ guestName }: HeroProps) {
           }}
         />
         <motion.img
-          src="wedding-invitation/images/pattern/flower-2.webp"
+          src="/images/pattern/flower-2.webp"
           alt=""
           className="absolute bottom-[5%] right-[5%] w-16 opacity-70 z-20"
           initial={{ y: 0, rotate: 0 }}
@@ -114,7 +114,7 @@ export default function Hero({ guestName }: HeroProps) {
           {/* Creative Decorative Elements */}
           <div className="absolute -bottom-8 -right-8 w-20 opacity-70 animate-float-slow">
             <img
-              src="wedding-invitation/images/pattern/flower-2.webp"
+              src="/images/pattern/flower-2.webp"
               alt=""
               className="w-full h-full"
             />

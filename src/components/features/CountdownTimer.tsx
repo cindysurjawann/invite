@@ -60,7 +60,7 @@ export default function CountdownTimer() {
       viewport={viewportSettings}
     >
       <div className="absolute inset-0 opacity-10" style={{ 
-        backgroundImage: 'url("wedding-invitation/images/pattern/subtle-pattern.webp")',
+        backgroundImage: 'url("/images/pattern/subtle-pattern.webp")',
         backgroundRepeat: 'repeat' 
       }} />
       

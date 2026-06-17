@@ -65,7 +65,7 @@ export default function StoryTimeline() {
                   {/* Corner decorations */}
                   <div className="absolute -top-4 -left-4 w-16 h-16 opacity-30">
                     <Image
-                      src="wedding-invitation/images/pattern/flower-1.webp"
+                      src="/images/pattern/flower-1.webp"
                       alt=""
                       fill
                       className="object-contain"
@@ -73,7 +73,7 @@ export default function StoryTimeline() {
                   </div>
                   <div className="absolute -bottom-4 -right-4 w-16 h-16 opacity-30 rotate-180">
                     <Image
-                      src="wedding-invitation/images/pattern/flower-1.webp"
+                      src="/images/pattern/flower-1.webp"
                       alt=""
                       fill
                       className="object-contain"
