@@ -59,6 +59,7 @@ const Home: NextPage = () => {
       setGuestName(decodeURIComponent(legacyName));
       setIsLoading(false);
     } else {
+      setIsBlocked(true);
       setIsLoading(false);
     }
   }, [router.isReady, router.query]);
