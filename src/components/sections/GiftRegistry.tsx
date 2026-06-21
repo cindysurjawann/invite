@@ -9,7 +9,7 @@ export default function GiftRegistry() {
   }
 
   return (
-    <section className="py-20" style={{ backgroundColor: activeTheme.background }}>
+    <section className="py-20 relative">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -17,10 +17,10 @@ export default function GiftRegistry() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-serif mb-4" style={{ color: activeTheme.text }}>
+          <h2 className="text-3xl md:text-4xl font-serif mb-4 text-white">
             Gift Registry
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-white/75 max-w-2xl mx-auto">
             Your presence at our wedding is the greatest gift of all. However, if you wish to honor us with a gift, we have registered at the following places.
           </p>
         </motion.div>

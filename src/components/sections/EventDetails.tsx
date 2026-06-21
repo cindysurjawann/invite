@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { weddingConfig } from '@/config/wedding-config';
 import { CalendarIcon, MapPinIcon, ClockIcon } from '@heroicons/react/24/outline';
+import CandleLight from '../ui/CandleLight';
 
 export default function EventDetails() {
   const formatDate = (dateString: string) => {
@@ -14,22 +15,30 @@ export default function EventDetails() {
   };
 
   const events = [
-    { title: 'Pemberkatan', details: weddingConfig.event.pemberkatan },
-    { title: 'Resepsi', details: weddingConfig.event.reception }
+    { title: 'Holy Matrimony', details: weddingConfig.event.pemberkatan },
+    { title: 'Reception', details: weddingConfig.event.reception }
   ];
 
   return (
-    <section className="py-20">
-      <div className="container mx-auto px-4">
+    <section className="relative py-20 overflow-hidden">
+      <CandleLight glowAt="30% 80%" intensity={0.15} />
+      <div className="container mx-auto px-4 relative" style={{ zIndex: 2 }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="relative bg-black/20 backdrop-blur-sm rounded-lg p-6 max-w-2xl mx-auto">
-            <h2 className="text-4xl font-serif mb-4 text-white">Save the Date</h2>
-            <p className="text-white/90">We invite you to celebrate our special day</p>
+          <div
+            className="relative rounded-lg p-6 max-w-2xl mx-auto"
+            style={{
+              background: 'rgba(255,255,255,0.85)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(200,150,30,0.25)',
+            }}
+          >
+            <h2 className="text-4xl font-serif mb-4 text-[#1c3d1c]">Save the Date</h2>
+            <p className="text-[#3d6b40]">We invite you to celebrate our special day</p>
           </div>
         </motion.div>
 
@@ -41,81 +50,67 @@ export default function EventDetails() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.2 }}
-              className="relative bg-white p-8 rounded-lg shadow-lg overflow-hidden"
-              style={{ minHeight: '400px' }}
+              className="relative p-8 rounded-lg overflow-hidden"
+              style={{
+                minHeight: '400px',
+                background: 'rgba(255, 255, 255, 0.90)',
+                border: '1px solid rgba(200,150,30,0.25)',
+                boxShadow: '0 8px 32px rgba(60,120,70,0.12), 0 0 0 1px rgba(200,150,30,0.10)',
+              }}
             >
-              {/* Decorations for Akad card */}
-              {event.title === 'Pemberkatan' && (
+              {/* Corner ornament — Holy Matrimony card */}
+              {event.title === 'Holy Matrimony' && (
                 <>
-                  <div className="absolute -top-8 -left-8 w-32 h-32 opacity-50">
-                    <Image
-                      src="/images/pattern/flower-1.webp"
-                      alt=""
-                      fill
-                      className="object-contain"
-                    />
+                  <div className="absolute -top-5 -left-5 w-24 h-24 opacity-35 pointer-events-none">
+                    <Image src="/images/pattern/garden-rose.svg" alt="" fill className="object-contain" />
                   </div>
-                  <div className="absolute -bottom-8 -right-8 w-32 h-32 opacity-50 rotate-180">
-                    <Image
-                      src="/images/pattern/flower-2.webp"
-                      alt=""
-                      fill
-                      className="object-contain"
-                    />
+                  <div className="absolute -bottom-5 -right-5 w-24 h-24 opacity-35 pointer-events-none rotate-180">
+                    <Image src="/images/pattern/garden-leaf.svg" alt="" fill className="object-contain" />
                   </div>
                 </>
               )}
 
-              {/* Decorations for Resepsi card */}
-              {event.title === 'Resepsi' && (
+              {/* Corner ornament — Reception card */}
+              {event.title === 'Reception' && (
                 <>
-                  <div className="absolute -top-8 -left-8 w-32 h-32 opacity-50">
-                    <Image
-                      src="/images/pattern/flower-3.webp"
-                      alt=""
-                      fill
-                      className="object-contain"
-                    />
+                  <div className="absolute -top-5 -left-5 w-24 h-24 opacity-35 pointer-events-none">
+                    <Image src="/images/pattern/garden-wildflower.svg" alt="" fill className="object-contain" />
                   </div>
-                  <div className="absolute -bottom-8 -right-8 w-32 h-32 opacity-50 rotate-180">
-                    <Image
-                      src="/images/pattern/flower-1.webp"
-                      alt=""
-                      fill
-                      className="object-contain"
-                    />
+                  <div className="absolute -bottom-5 -right-5 w-24 h-24 opacity-35 pointer-events-none rotate-180">
+                    <Image src="/images/pattern/garden-rose.svg" alt="" fill className="object-contain" />
                   </div>
                 </>
               )}
-              <h3 className="text-2xl font-serif mb-6 text-center">{event.title}</h3>
-              
+
+              <h3 className="text-2xl font-serif mb-6 text-center text-[#1c3d1c]">{event.title}</h3>
+
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
-                  <CalendarIcon className="w-6 h-6 text-gray-400" />
+                  <CalendarIcon className="w-6 h-6 flex-shrink-0" style={{ color: '#c8961e' }} />
                   <div>
-                    <p className="font-medium">{formatDate(event.details.date)}</p>
+                    <p className="font-medium text-[#1c3d1c]">{formatDate(event.details.date)}</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <ClockIcon className="w-6 h-6 text-gray-400" />
+                  <ClockIcon className="w-6 h-6 flex-shrink-0" style={{ color: '#c8961e' }} />
                   <div>
-                    <p className="font-medium">{event.details.time} WIB</p>
+                    <p className="font-medium text-[#1c3d1c]">{event.details.time} WIB</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <MapPinIcon className="w-6 h-6 text-gray-400" />
+                  <MapPinIcon className="w-6 h-6 flex-shrink-0" style={{ color: '#c8961e' }} />
                   <div>
-                    <p className="font-medium">{event.details.venue}</p>
-                    <p className="text-gray-600">{event.details.address}</p>
+                    <p className="font-medium text-[#1c3d1c]">{event.details.venue}</p>
+                    <p className="text-[#557558]">{event.details.address}</p>
                   </div>
                 </div>
 
                 {event.details.dresscode && (
                   <div className="text-center mt-6">
-                    <p className="text-sm text-gray-500">Dress Code</p>
-                    <p className="font-medium">{event.details.dresscode}</p>
+                    <p className="text-sm text-[#557558]">Dress Code</p>
+                    <p className="font-medium text-[#1c3d1c]">{event.details.dresscode}</p>
                   </div>
                 )}
 
@@ -123,7 +118,12 @@ export default function EventDetails() {
                   href={event.details.mapLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full text-center bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 rounded-lg transition-colors mt-6"
+                  className="block w-full text-center font-medium py-3 rounded-lg transition-colors mt-6"
+                  style={{
+                    background: 'rgba(200,150,30,0.12)',
+                    color: '#c8961e',
+                    border: '1px solid rgba(200,150,30,0.30)',
+                  }}
                 >
                   View Location
                 </a>
@@ -144,7 +144,7 @@ export default function EventDetails() {
                       'END:VEVENT',
                       'END:VCALENDAR'
                     ].join('\n');
-                    
+
                     const blob = new Blob([icsContent], { type: 'text/calendar' });
                     const url = URL.createObjectURL(blob);
                     const link = document.createElement('a');
@@ -154,7 +154,13 @@ export default function EventDetails() {
                     link.click();
                     document.body.removeChild(link);
                   }}
-                  className="block w-full text-center bg-gray-900 hover:bg-gray-800 text-white font-semibold text-lg py-4 px-6 rounded-lg shadow-lg border-2 border-gray-800 transition-all duration-200 mt-4 active:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 relative z-10"
+                  className="block w-full text-center font-semibold text-lg py-4 px-6 rounded-lg transition-all duration-200 mt-4 relative z-10 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                  style={{
+                    background: '#c8961e',
+                    color: '#0e1a12',
+                    border: '1px solid rgba(200,150,30,0.6)',
+                    boxShadow: '0 4px 15px rgba(200,150,30,0.20)',
+                  }}
                 >
                   Save to Calendar
                 </button>

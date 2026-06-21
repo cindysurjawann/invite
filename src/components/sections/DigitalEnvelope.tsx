@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { weddingConfig } from '@/config/wedding-config';
-import { activeTheme } from '@/config/theme-config';
+import CandleLight from '@/components/ui/CandleLight';
 
 export default function DigitalEnvelope() {
   const [copiedText, setCopiedText] = useState<string>('');
@@ -14,116 +14,71 @@ export default function DigitalEnvelope() {
 
   return (
     <section
-      className="py-8 md:py-20"
-      style={{ backgroundColor: activeTheme.secondary }}
+      className="relative py-8 md:py-20 overflow-hidden"
     >
-      <div className="container mx-auto px-4">
+      <CandleLight glowAt="60% 55%" intensity={0.17} />
+      <div className="container mx-auto px-4 relative" style={{ zIndex: 2 }}>
         <div className="text-center mb-6 md:mb-16">
-          <h2 className="text-2xl md:text-4xl font-serif mb-2 md:mb-4" style={{ color: activeTheme.text }}>
+          <h2 className="text-2xl md:text-4xl font-serif mb-2 md:mb-4 text-white">
             Digital Envelope
           </h2>
-          <p className="text-gray-600 text-xs md:text-base">Your blessings mean a lot to us</p>
+          <p className="text-white/75 text-xs md:text-base">Your blessings mean a lot to us</p>
         </div>
 
-        <div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:gap-8 max-w-4xl mx-auto">
-          {/* Bank Transfers */}
-          <div className="relative bg-white p-4 md:p-8 rounded-xl shadow-lg overflow-hidden">
-            {/* Top-left decoration */}
-            <div className="absolute -top-4 -left-4 w-20 h-20 opacity-50">
-              <Image
-                src="/images/pattern/flower-2.webp"
-                alt=""
-                fill
-                className="object-contain"
-              />
+        <div className="max-w-lg mx-auto">
+          <div
+            className="relative p-6 md:p-10 rounded-xl overflow-hidden"
+            style={{
+              background: 'rgba(255, 255, 255, 0.90)',
+              border: '1px solid rgba(200,150,30,0.25)',
+              boxShadow: '0 8px 32px rgba(60,120,70,0.10)',
+            }}
+          >
+            {/* Corner garden ornaments */}
+            <div className="absolute -top-4 -left-4 w-20 h-20 opacity-35 pointer-events-none">
+              <Image src="/images/pattern/garden-rose.svg" alt="" fill className="object-contain" />
             </div>
-            {/* Bottom-right decoration */}
-            <div className="absolute -bottom-4 -right-4 w-20 h-20 opacity-50 rotate-180">
-              <Image
-                src="/images/pattern/flower-3.webp"
-                alt=""
-                fill
-                className="object-contain"
-              />
+            <div className="absolute -bottom-4 -right-4 w-20 h-20 opacity-35 pointer-events-none rotate-180">
+              <Image src="/images/pattern/garden-wildflower.svg" alt="" fill className="object-contain" />
             </div>
-            <h3 className="text-xl md:text-2xl font-serif mb-4 md:mb-6 text-center" style={{ color: activeTheme.text }}>
+
+            <h3 className="text-xl md:text-2xl font-serif mb-6 text-center text-[#1c3d1c]">
               Bank Transfer
             </h3>
-            <div className="space-y-4 md:space-y-6">
+            <div className="space-y-4">
               {weddingConfig.digitalEnvelope.banks.map((bank, index) => (
-                <div key={index} className="p-4 border rounded-lg transition-colors">
-                  <div>
-                    <p className="font-medium text-lg mb-2">{bank.name}</p>
-                    <p className="font-mono text-gray-600 mb-2">{bank.accountNumber}</p>
-                    <p className="text-sm text-gray-500 mb-3">a.n {bank.accountHolder}</p>
-                  </div>
-                  <div className="mt-4">
-                    <button
-                      onClick={() => handleCopy(bank.accountNumber)}
-                      className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-                      style={{ color: activeTheme.text }}
-                    >
-                      {copiedText === bank.accountNumber ? 'Copied!' : 'Copy Number'}
-                    </button>
-                  </div>
+                <div
+                  key={index}
+                  className="p-4 rounded-lg"
+                  style={{
+                    background: 'rgba(255,255,255,0.75)',
+                    border: '1px solid rgba(200,150,30,0.18)',
+                  }}
+                >
+                  <p className="font-medium text-lg mb-1 text-[#1c3d1c]">{bank.name}</p>
+                  <p className="font-mono text-[#3d6b40] mb-1">{bank.accountNumber}</p>
+                  <p className="text-sm text-[#557558] mb-3">a.n {bank.accountHolder}</p>
+                  <button
+                    onClick={() => handleCopy(bank.accountNumber)}
+                    className="w-full py-2 px-4 rounded-lg transition-all font-medium text-sm"
+                    style={{
+                      background: copiedText === bank.accountNumber ? 'rgba(200,150,30,0.25)' : 'rgba(200,150,30,0.12)',
+                      color: '#c8961e',
+                      border: '1px solid rgba(200,150,30,0.25)',
+                    }}
+                  >
+                    {copiedText === bank.accountNumber ? '✓ Copied!' : 'Copy Number'}
+                  </button>
                 </div>
               ))}
             </div>
           </div>
+        </div>
 
-          {/* E-Wallets */}
-          <div className="relative bg-white p-4 md:p-8 rounded-xl shadow-lg overflow-hidden">
-            {/* Top-left decoration */}
-            <div className="absolute -top-4 -left-4 w-20 h-20 opacity-50">
-              <Image
-                src="/images/pattern/flower-1.webp"
-                alt=""
-                fill
-                className="object-contain"
-              />
-            </div>
-            {/* Bottom-right decoration */}
-            <div className="absolute -bottom-4 -right-4 w-20 h-20 opacity-50 rotate-180">
-              <Image
-                src="/images/pattern/flower-2.webp"
-                alt=""
-                fill
-                className="object-contain"
-              />
-            </div>
-            <h3 className="text-xl md:text-2xl font-serif mb-4 md:mb-6 text-center" style={{ color: activeTheme.text }}>
-              E-Wallet
-            </h3>
-            <div className="space-y-4 md:space-y-6">
-              {weddingConfig.digitalEnvelope.eWallets.map((wallet, index) => (
-                <div key={index} className="p-4 border rounded-lg transition-colors">
-                  <div>
-                    <p className="font-medium text-lg mb-2">{wallet.name}</p>
-                    <p className="font-mono text-gray-600 mb-2">{wallet.number}</p>
-                    {wallet.logo && (
-                      <div className="relative w-14 h-14 md:w-20 md:h-20 mx-auto mb-2 md:mb-3">
-                        <Image
-                          src={wallet.logo}
-                          alt={`${wallet.name} Logo`}
-                          fill
-                          className="object-contain"
-                        />
-                      </div>
-                    )}
-                  </div>
-                  <div className="mt-4">
-                    <button
-                      onClick={() => handleCopy(wallet.number)}
-                      className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-                      style={{ color: activeTheme.text }}
-                    >
-                      {copiedText === wallet.number ? 'Copied!' : 'Copy Number'}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+        <div className="mt-12 md:mt-16 flex items-center gap-3">
+          <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(200,150,30,0.45))' }} />
+          <img src="/images/pattern/garden-rose.svg" alt="" className="w-7 h-7 opacity-60" />
+          <div className="flex-1 h-px" style={{ background: 'linear-gradient(to left, transparent, rgba(200,150,30,0.45))' }} />
         </div>
       </div>
     </section>

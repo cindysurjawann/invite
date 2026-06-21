@@ -28,27 +28,33 @@ export const themes = {
     background: '#FFFFFF'
   },
   classic: {
-    primary: "#937D64",    // Elegant gold
-    secondary: "#F5F5F5",  // Light gray
-    accent: "#B8A088",     // Light gold
-    text: "#2C2C2C",       // Dark gray
-    background: "#FFFFFF"   // White
+    primary: "#937D64",
+    secondary: "#F5F5F5",
+    accent: "#B8A088",
+    text: "#2C2C2C",
+    background: "#FFFFFF"
   },
   romantic: {
-    primary: "#D4A5A5",    // Dusty rose
-    secondary: "#F9F1F0",  // Light pink
-    accent: "#9E7777",     // Mauve
-    text: "#3C2A2A",       // Dark brown
+    primary: "#D4A5A5",
+    secondary: "#F9F1F0",
+    accent: "#9E7777",
+    text: "#3C2A2A",
     background: "#FFFFFF"
   },
   modern: {
-    primary: "#3F4E4F",    // Dark sage
-    secondary: "#EAE7DC",  // Cream
-    accent: "#A27B5C",     // Warm brown
-    text: "#2C3639",       // Charcoal
+    primary: "#3F4E4F",
+    secondary: "#EAE7DC",
+    accent: "#A27B5C",
+    text: "#2C3639",
     background: "#FFFFFF"
+  },
+  enchantedGarden: {
+    primary: '#c8961e',    // warm amber / lantern gold
+    secondary: '#deecd4',  // light sage green
+    accent: '#e8c0c4',     // blush rose
+    text: '#1c3d1c',       // dark forest green
+    background: '#edf5e4'  // light airy sage
   }
 };
 
-export const activeTheme = themes.dustyBlue; // Default theme
-// export const activeTheme = themes.modern; // Default theme
+export const activeTheme = themes.enchantedGarden;

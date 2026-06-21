@@ -6,7 +6,7 @@ export default function LiveStreaming() {
   if (!weddingConfig.specialFeatures.liveStreaming.enabled) return null;
 
   return (
-    <section className="py-20" style={{ backgroundColor: activeTheme.background }}>
+    <section className="py-20 relative">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -14,10 +14,10 @@ export default function LiveStreaming() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-serif mb-4" style={{ color: activeTheme.text }}>
+          <h2 className="text-4xl font-serif mb-4 text-white">
             Live Streaming
           </h2>
-          <p className="text-gray-600">Join us virtually on our special day</p>
+          <p className="text-white/75">Join us virtually on our special day</p>
         </motion.div>
 
         <div className="max-w-4xl mx-auto">

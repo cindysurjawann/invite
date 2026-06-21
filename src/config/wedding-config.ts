@@ -161,7 +161,7 @@ export const weddingConfig = {
       fullName: "Cindy Surjawan",
       photo: {
         url: "/images/couple/bride.webp",
-        aspectRatio: "portrait",
+        aspectRatio: "1:1",
         frame: {
           "1:1": "/images/couple/frame-photo-1.webp",
           portrait: "/images/couple/frame-photo-2.webp"
@@ -240,25 +240,13 @@ export const weddingConfig = {
     banks: [
       {
         name: "BCA",
-        accountNumber: "1234567890",
+        accountNumber: "7615073814",
         accountHolder: "Vincensius Anthony"
       },
       {
         name: "BCA",
         accountNumber: "6040875857",
         accountHolder: "Cindy Surjawan"
-      }
-    ],
-    eWallets: [
-      {
-        name: "GoPay",
-        number: "082299691933",
-        logo: "/images/logos/gopay.webp"
-      },
-      {
-        name: "ShopeePay",
-        number: "082299691933",
-        logo: "/images/logos/shopeepay.webp"
       }
     ]
   },
@@ -279,14 +267,26 @@ export const weddingConfig = {
       {
         url: '/images/gallery/optimized/moment-1.webp',
         caption: 'First Concert - Sharing Our Love for Music'
+      },
+      {
+        url: '/images/gallery/optimized/prewedding-2.webp',
+        caption: 'Beach Getaway - Our First Vacation'
+      },
+      {
+        url: '/images/gallery/optimized/prewedding-3.webp',
+        caption: 'Hiking Together - Overcoming Challenges'
+      },
+      {
+        url: '/images/gallery/optimized/moment-1.webp',
+        caption: 'First Concert - Sharing Our Love for Music'
       }
     ]
   },
   music: {
     tracks: [
       {
-        src: '/music/song1.mp3',
-        title: 'Lagu 1',
+        src: '/music/wildest-dream.mp3',
+        title: 'Wildest Dream (Bridgerton Version)',
         artist: 'Artis 1'
       }
     ]

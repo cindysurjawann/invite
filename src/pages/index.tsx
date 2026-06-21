@@ -89,9 +89,23 @@ const Home: NextPage = () => {
     );
   }
 
+  const sectionIds = [
+    'section-hero',
+    'section-couple',
+    'section-countdown',
+    'section-event',
+    'section-story',
+    'section-gallery',
+    'section-livestream',
+    'section-envelope',
+    'section-rsvp',
+    'section-guestbook',
+    'section-registry',
+  ];
+
   return (
     <ThemeProvider>
-      <MainLayout guestName={guestName}>
+      <MainLayout guestName={guestName} sectionIds={sectionIds}>
         <Hero guestName={guestName} />
         <CoupleProfile />
         <CountdownTimer />
