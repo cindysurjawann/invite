@@ -238,11 +238,21 @@ export default function RSVP({ guestName, guestId, guestWhatsapp, previousRsvp, 
                 <div style={{ width: '100%', height: '1px', background: 'linear-gradient(to right, transparent, #c8881a 30%, #c8881a 70%, transparent)', margin: '0.25rem 0' }} />
 
                 {submitted ? (
-                  <div
-                    className="w-full py-3 px-6 text-center rounded font-medium text-sm"
-                    style={{ background: 'rgba(139,98,30,0.12)', color: '#7a5210', border: '1px solid rgba(139,98,30,0.35)', fontFamily: 'serif', letterSpacing: '0.04em' }}
-                  >
-                    Thank you! Your RSVP has been received.
+                  <div className="space-y-3">
+                    <div
+                      className="w-full py-3 px-6 text-center rounded font-medium text-sm"
+                      style={{ background: 'rgba(139,98,30,0.12)', color: '#7a5210', border: '1px solid rgba(139,98,30,0.35)', fontFamily: 'serif', letterSpacing: '0.04em' }}
+                    >
+                      Thank you! Your RSVP has been received.
+                    </div>
+                    {formData.attendance === 'Yes' && (
+                      <div
+                        className="w-full py-3 px-6 text-center rounded text-sm"
+                        style={{ background: 'rgba(139,98,30,0.07)', color: '#7a5210', border: '1px dashed rgba(139,98,30,0.45)', fontFamily: 'serif', letterSpacing: '0.02em', lineHeight: '1.55' }}
+                      >
+                        🎟️ QR Code undangan akan dikirimkan ke WhatsApp kamu dalam <strong>1×24 jam</strong>.
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <button

@@ -12,6 +12,7 @@ import LiveStreaming from '@/components/sections/LiveStreaming';
 // import ShareButton from '@/components/features/ShareButton';
 import GiftRegistry from '@/components/sections/GiftRegistry';
 import AdminPage from '@/components/sections/AdminPage';
+import GreeterPage from '@/components/sections/GreeterPage';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import CountdownTimer from '@/components/features/CountdownTimer';
 import { useEffect, useState } from 'react';
@@ -21,6 +22,7 @@ import { supabase } from '@/lib/supabase';
 import { weddingConfig } from '@/config/wedding-config';
 
 const ADMIN_GUEST_ID = '3512df82-6520-4c99-9d74-e07eddcef977';
+const GREETER_GUEST_ID = '7aec1951-4f48-4a4d-b4d2-05a312d05b69';
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -34,6 +36,7 @@ const Home: NextPage = () => {
   } | null>(null);
   const [rsvpEmailSent, setRsvpEmailSent] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isGreeter, setIsGreeter] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -46,6 +49,12 @@ const Home: NextPage = () => {
     if (typeof queryGuestId === 'string') {
       if (queryGuestId === ADMIN_GUEST_ID) {
         setIsAdmin(true);
+        setIsLoading(false);
+        return;
+      }
+
+      if (queryGuestId === GREETER_GUEST_ID) {
+        setIsGreeter(true);
         setIsLoading(false);
         return;
       }
@@ -108,6 +117,10 @@ const Home: NextPage = () => {
 
   if (isAdmin) {
     return <AdminPage />;
+  }
+
+  if (isGreeter) {
+    return <GreeterPage />;
   }
 
   if (isBlocked) {
