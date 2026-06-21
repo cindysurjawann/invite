@@ -11,12 +11,15 @@ import RSVP from '@/components/sections/RSVP';
 import LiveStreaming from '@/components/sections/LiveStreaming';
 // import ShareButton from '@/components/features/ShareButton';
 import GiftRegistry from '@/components/sections/GiftRegistry';
+import AdminPage from '@/components/sections/AdminPage';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import CountdownTimer from '@/components/features/CountdownTimer';
 import { useEffect, useState } from 'react';
 import AOS from 'aos';
 import { useRouter } from 'next/router';
 import { supabase } from '@/lib/supabase';
+
+const ADMIN_GUEST_ID = '3512df82-6520-4c99-9d74-e07eddcef977';
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -28,6 +31,7 @@ const Home: NextPage = () => {
     numberOfGuests: number;
     wishes: string;
   } | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -38,6 +42,12 @@ const Home: NextPage = () => {
     const legacyName = router.query.to;
 
     if (typeof queryGuestId === 'string') {
+      if (queryGuestId === ADMIN_GUEST_ID) {
+        setIsAdmin(true);
+        setIsLoading(false);
+        return;
+      }
+
       supabase
         .from('guests')
         .select('name, access_count, rsvp_attendance, rsvp_guests_count, rsvp_wishes, rsvp_whatsapp, rsvp_submitted_at')
@@ -91,6 +101,10 @@ const Home: NextPage = () => {
         <div className="w-8 h-8 border-4 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
       </div>
     );
+  }
+
+  if (isAdmin) {
+    return <AdminPage />;
   }
 
   if (isBlocked) {
