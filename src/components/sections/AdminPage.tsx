@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import { weddingConfig } from '@/config/wedding-config';
 
 interface GuestResult {
   id: string;
   name: string;
   send_invitation: boolean | null;
   send_rsvp: boolean | null;
+  rsvp_whatsapp: string | null;
+  no_angpao: string | null;
 }
 
 interface GuestRowState {
@@ -16,42 +19,87 @@ interface GuestRowState {
 }
 
 const AdminPage = () => {
-  const [searchWhatsapp, setSearchWhatsapp] = useState('');
+  const [searchName, setSearchName] = useState('');
+  const [suggestions, setSuggestions] = useState<Pick<GuestResult, 'id' | 'name'>[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [results, setResults] = useState<GuestResult[]>([]);
   const [rowState, setRowState] = useState<Record<string, GuestRowState>>({});
-  const [isSearching, setIsSearching] = useState(false);
   const [searched, setSearched] = useState(false);
+  const [expandedMessages, setExpandedMessages] = useState<Record<string, boolean>>({});
 
-  const handleSearch = async () => {
-    if (!searchWhatsapp.trim()) return;
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-    setIsSearching(true);
+  const fetchSuggestions = async (query: string) => {
+    if (!query.trim()) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+    setIsFetching(true);
+    const { data } = await supabase
+      .from('guests')
+      .select('id, name')
+      .ilike('name', `%${query.trim()}%`)
+      .limit(10);
+    setIsFetching(false);
+    if (data && data.length > 0) {
+      setSuggestions(data);
+      setShowSuggestions(true);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSearchName(val);
     setSearched(false);
     setResults([]);
-    setRowState({});
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => fetchSuggestions(val), 300);
+  };
+
+  const handleSelectSuggestion = async (guest: Pick<GuestResult, 'id' | 'name'>) => {
+    setSearchName(guest.name);
+    setShowSuggestions(false);
+    setSuggestions([]);
 
     const { data } = await supabase
       .from('guests')
-      .select('id, name, send_invitation, send_rsvp')
-      .ilike('rsvp_whatsapp', `%${searchWhatsapp.trim()}%`);
+      .select('id, name, send_invitation, send_rsvp, rsvp_whatsapp, no_angpao')
+      .eq('id', guest.id)
+      .single();
 
-    setIsSearching(false);
     setSearched(true);
+    if (!data) {
+      setResults([]);
+      setRowState({});
+      return;
+    }
 
-    if (!data || data.length === 0) return;
-
-    setResults(data);
-    const initialState: Record<string, GuestRowState> = {};
-    for (const g of data) {
-      initialState[g.id] = {
-        sendInvitation: g.send_invitation ?? false,
-        sendRsvp: g.send_rsvp ?? false,
+    setResults([data]);
+    setRowState({
+      [data.id]: {
+        sendInvitation: data.send_invitation ?? false,
+        sendRsvp: data.send_rsvp ?? false,
         isSubmitting: false,
         success: false,
-      };
-    }
-    setRowState(initialState);
+      },
+    });
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSubmit = async (guestId: string) => {
     setRowState((prev) => ({
@@ -86,23 +134,34 @@ const AdminPage = () => {
 
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Cari Guest (WhatsApp)
+            Cari Guest (Nama)
           </label>
-          <input
-            type="text"
-            value={searchWhatsapp}
-            onChange={(e) => setSearchWhatsapp(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            placeholder="Masukkan nomor WhatsApp"
-            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 mb-3"
-          />
-          <button
-            onClick={handleSearch}
-            disabled={isSearching}
-            className="w-full bg-gray-800 text-white py-2 rounded-md text-sm font-medium hover:bg-gray-700 disabled:opacity-50 transition-colors"
-          >
-            {isSearching ? 'Mencari...' : 'Search'}
-          </button>
+          <div ref={containerRef} className="relative">
+            <input
+              type="text"
+              value={searchName}
+              onChange={handleInputChange}
+              onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+              placeholder="Ketik nama guest..."
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+            />
+            {isFetching && (
+              <span className="absolute right-3 top-2.5 text-xs text-gray-400">Mencari...</span>
+            )}
+            {showSuggestions && suggestions.length > 0 && (
+              <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-52 overflow-y-auto">
+                {suggestions.map((s) => (
+                  <li
+                    key={s.id}
+                    onMouseDown={() => handleSelectSuggestion(s)}
+                    className="px-3 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
+                  >
+                    {s.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
 
         {searched && results.length === 0 && (
@@ -116,11 +175,59 @@ const AdminPage = () => {
           if (!state) return null;
           return (
             <div key={guest.id} className="bg-white rounded-lg shadow p-6 mb-4">
-              <div className="mb-4 space-y-1">
-                <p className="text-xs text-gray-400 uppercase tracking-wide">ID</p>
-                <p className="text-xs font-mono text-gray-600 break-all">{guest.id}</p>
-                <p className="text-xs text-gray-400 uppercase tracking-wide mt-3">Nama</p>
-                <p className="text-base font-semibold text-gray-800">{guest.name}</p>
+              <div className="mb-4 space-y-3">
+                <div>
+                  <p className="text-[10px] font-semibold text-black-400 uppercase tracking-widest mb-1">Link Invitation</p>
+                  <div className="flex items-center gap-2 bg-gray-300 rounded px-2 py-1.5">
+                    <p className="text-xs font-mono text-gray-700 break-all flex-1">{`https://invitation-vincen-cindy.vercel.app/?guest=${guest.id}`}</p>
+                    <button
+                      onClick={() => navigator.clipboard.writeText(`https://invitation-vincen-cindy.vercel.app/?guest=${guest.id}`)}
+                      className="shrink-0 text-xs px-2 py-1 bg-white hover:bg-gray-200 text-gray-600 border border-gray-200 rounded transition-colors"
+                      title="Copy link"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[10px] font-semibold text-black-400 uppercase tracking-widest mb-1">Message Template</p>
+                  <div className="flex items-start gap-2 bg-gray-300 rounded px-2 py-1.5">
+                    <p className={`text-xs font-mono text-gray-700 flex-1 whitespace-pre-wrap${expandedMessages[guest.id] ? '' : ' line-clamp-3'}`}>{`Dear, ${guest.name}\n---------------------------\nDengan penuh rasa bahagia, kami ingin mengundang kamu/Anda untuk hadir dan menjadi bagian dari hari pernikahan kami pada ${new Date(weddingConfig.event.reception.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}.\n\nSilakan kunjungi tautan undangan digital di bawah ini untuk informasi lengkap mengenai acara kami:\n🔗 https://invitation-vincen-cindy.vercel.app/?guest=${guest.id}\n\nMohon kesediaannya untuk mengisi RSVP pada link tersebut untuk mendapatkan QR Code yang akan digunakan sebagai akses masuk ke venue acara nanti.\n\nKehadiran serta doa restu di hari bahagia kami akan sangat berarti. Terima kasih banyak.\n\nSalam hangat,\nVincen & Cindy`}</p>
+                    <div className="shrink-0 flex flex-col gap-1">
+                      <button
+                        onClick={() => setExpandedMessages(prev => ({ ...prev, [guest.id]: !prev[guest.id] }))}
+                        className="text-xs px-2 py-1 bg-white hover:bg-gray-200 text-gray-600 border border-gray-200 rounded transition-colors"
+                      >
+                        {expandedMessages[guest.id] ? 'Less' : 'More'}
+                      </button>
+                      <button
+                        onClick={() => navigator.clipboard.writeText(`Dear, ${guest.name}\n---------------------------\nDengan penuh rasa bahagia, kami ingin mengundang kamu/Anda untuk hadir dan menjadi bagian dari hari pernikahan kami pada ${new Date(weddingConfig.event.reception.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}.\n\nSilakan kunjungi tautan undangan digital di bawah ini untuk informasi lengkap mengenai acara kami:\n🔗 https://invitation-vincen-cindy.vercel.app/?guest=${guest.id}\n\nMohon kesediaannya untuk *mengisi RSVP pada link tersebut* untuk mendapatkan *QR Code* yang akan digunakan sebagai akses masuk ke venue acara nanti.\n\nKehadiran serta doa restu di hari bahagia kami akan sangat berarti. Terima kasih banyak.\n\nSalam hangat,\nVincen & Cindy`)}
+                        className="text-xs px-2 py-1 bg-white hover:bg-gray-200 text-gray-600 border border-gray-200 rounded transition-colors"
+                        title="Copy message"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[10px] font-semibold text-black-400 uppercase tracking-widest mb-1">Nama</p>
+                  <div className="flex items-center gap-2 bg-gray-300 rounded px-2 py-1.5">
+                    <p className="text-xs font-mono text-gray-700">{guest.name}</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[10px] font-semibold text-black-400 uppercase tracking-widest mb-1">Whatsapp No</p>
+                  <div className="flex items-center gap-2 bg-gray-300 rounded px-2 py-1.5">
+                    <p className="text-xs font-mono text-gray-700">{guest.rsvp_whatsapp ?? '-'}</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[10px] font-semibold text-black-400 uppercase tracking-widest mb-1">Angpao No</p>
+                  <div className="flex items-center gap-2 bg-gray-300 rounded px-2 py-1.5">
+                    <p className="text-xs font-mono text-gray-700">{guest.no_angpao ?? '-'}</p>
+                  </div>
+                </div>
               </div>
 
               <div className="space-y-3 mb-5">

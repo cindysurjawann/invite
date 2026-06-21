@@ -141,7 +141,7 @@ export default function RSVP({ guestName, guestId, guestWhatsapp, previousRsvp, 
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-serif mb-4 text-white">RSVP</h2>
-          <p className="text-white/75">Please confirm your attendance</p>
+          <p className="text-white/80">Please confirm your attendance</p>
         </motion.div>
 
         <motion.div

@@ -18,11 +18,9 @@ export default function DigitalEnvelope() {
     >
       <CandleLight glowAt="60% 55%" intensity={0.17} />
       <div className="container mx-auto px-4 relative" style={{ zIndex: 2 }}>
-        <div className="text-center mb-6 md:mb-16">
-          <h2 className="text-2xl md:text-4xl font-serif mb-2 md:mb-4 text-white">
-            Digital Envelope
-          </h2>
-          <p className="text-white/75 text-xs md:text-base">Your blessings mean a lot to us</p>
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-serif mb-4 text-white">Digital Envelope</h2>
+          <p className="text-white/80">Your blessings mean a lot to us</p>
         </div>
 
         <div className="max-w-lg mx-auto">
