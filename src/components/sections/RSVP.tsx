@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { weddingConfig } from '@/config/wedding-config';
 import { supabase } from '@/lib/supabase';
@@ -7,17 +7,33 @@ import CandleLight from '../ui/CandleLight';
 interface RSVPProps {
   guestName?: string;
   guestId?: string;
+  guestWhatsapp?: string;
+  previousRsvp?: {
+    attendance: string;
+    numberOfGuests: number;
+    wishes: string;
+  } | null;
 }
 
-export default function RSVP({ guestName, guestId }: RSVPProps) {
+export default function RSVP({ guestName, guestId, guestWhatsapp, previousRsvp }: RSVPProps) {
   const [formData, setFormData] = useState({
     name: guestName || '',
-    attendance: '',
-    numberOfGuests: 1,
-    wishes: '',
+    attendance: previousRsvp?.attendance || '',
+    numberOfGuests: previousRsvp?.numberOfGuests || 1,
+    wishes: previousRsvp?.wishes || '',
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!previousRsvp) return;
+    setFormData((prev) => ({
+      ...prev,
+      attendance: previousRsvp.attendance,
+      numberOfGuests: previousRsvp.numberOfGuests,
+      wishes: previousRsvp.wishes,
+    }));
+  }, [previousRsvp]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +49,20 @@ export default function RSVP({ guestName, guestId }: RSVPProps) {
           rsvp_submitted_at: new Date().toISOString(),
         })
         .eq('id', guestId);
+
+      if (!previousRsvp) {
+        await supabase.functions.invoke('send-rsvp-email', {
+          body: {
+            guestId,
+            guestName: formData.name,
+            whatsapp: guestWhatsapp,
+            attendance: formData.attendance,
+            numberOfGuests: formData.numberOfGuests,
+            wishes: formData.wishes,
+          },
+        });
+      }
+
       setSubmitted(true);
     } else {
       const message = `*RSVP Wedding*%0AName: ${formData.name}%0AAttendance: ${formData.attendance}%0ANumber of Guests: ${formData.numberOfGuests}%0AWishes: ${formData.wishes}`;

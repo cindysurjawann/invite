@@ -22,6 +22,12 @@ const Home: NextPage = () => {
   const router = useRouter();
   const [guestName, setGuestName] = useState<string>('');
   const [guestId, setGuestId] = useState<string>('');
+  const [guestWhatsapp, setGuestWhatsapp] = useState<string>('');
+  const [previousRsvp, setPreviousRsvp] = useState<{
+    attendance: string;
+    numberOfGuests: number;
+    wishes: string;
+  } | null>(null);
   const [isBlocked, setIsBlocked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,7 +40,7 @@ const Home: NextPage = () => {
     if (typeof queryGuestId === 'string') {
       supabase
         .from('guests')
-        .select('name, access_count')
+        .select('name, access_count, rsvp_attendance, rsvp_guests_count, rsvp_wishes, rsvp_whatsapp, rsvp_submitted_at')
         .eq('id', queryGuestId)
         .single()
         .then(({ data }) => {
@@ -45,6 +51,14 @@ const Home: NextPage = () => {
           }
           setGuestName(data.name);
           setGuestId(queryGuestId);
+          setGuestWhatsapp(data.rsvp_whatsapp ?? '');
+          if (data.rsvp_submitted_at) {
+            setPreviousRsvp({
+              attendance: data.rsvp_attendance ?? '',
+              numberOfGuests: data.rsvp_guests_count ?? 1,
+              wishes: data.rsvp_wishes ?? '',
+            });
+          }
           supabase
             .from('guests')
             .update({
@@ -114,7 +128,7 @@ const Home: NextPage = () => {
         <Gallery />
         <LiveStreaming />
         <DigitalEnvelope />
-        <RSVP guestName={guestName} guestId={guestId} />
+        <RSVP guestName={guestName} guestId={guestId} guestWhatsapp={guestWhatsapp} previousRsvp={previousRsvp} />
         <GuestBook />
         <GiftRegistry />
       </MainLayout>
