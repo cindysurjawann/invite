@@ -304,11 +304,11 @@ const GuestCheckIn = () => {
 // ── Root component ────────────────────────────────────────────────────────────
 
 const GreeterPage = () => {
-  const [activeMenu, setActiveMenu] = useState<ActiveMenu>('search');
+  const [activeMenu, setActiveMenu] = useState<ActiveMenu>('checkin');
 
   const menus: { key: ActiveMenu; label: string }[] = [
-    { key: 'search', label: 'Search Guest' },
     { key: 'checkin', label: 'Guest Check In' },
+    { key: 'search', label: 'Search Guest' },
   ];
 
   return (
