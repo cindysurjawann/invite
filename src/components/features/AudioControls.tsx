@@ -10,9 +10,9 @@ interface AudioControlsProps {
 export default function AudioControls({ isPlaying, onToggle }: AudioControlsProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="fixed bottom-8 left-8 z-40"
+      className="fixed top-8 left-8 z-40"
     >
       <button
         onClick={onToggle}
