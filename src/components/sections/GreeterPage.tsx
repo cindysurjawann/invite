@@ -203,7 +203,7 @@ const GuestCheckIn = () => {
         handleScanSuccess,
         () => {},
       );
-    } catch (err) {
+    } catch {
       setErrorMsg('Kamera tidak bisa diakses. Pastikan izin kamera diberikan.');
       setScanState('error');
       scannerRef.current = null;
