@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { weddingConfig } from '../../config/wedding-config';
-import { activeTheme } from '../../config/theme-config';
 import { scrollAnimation, viewportSettings } from '../animations/scrollAnimations';
 import CandleLight from '../ui/CandleLight';
 
