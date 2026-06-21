@@ -6,7 +6,7 @@ import CandleLight from '../ui/CandleLight';
 
 export default function EventDetails() {
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('id-ID', {
+    return new Date(dateString).toLocaleDateString('en-ID', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -29,17 +29,8 @@ export default function EventDetails() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div
-            className="relative rounded-lg p-6 max-w-2xl mx-auto"
-            style={{
-              background: 'rgba(255,255,255,0.85)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(200,150,30,0.25)',
-            }}
-          >
-            <h2 className="text-4xl font-serif mb-4 text-[#1c3d1c]">Save the Date</h2>
-            <p className="text-[#3d6b40]">We invite you to celebrate our special day</p>
-          </div>
+          <h2 className="text-4xl font-serif mb-4 text-white">Save the Date</h2>
+          <p className="text-white/80">We invite you to celebrate our special day</p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">

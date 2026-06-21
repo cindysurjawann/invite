@@ -21,15 +21,6 @@ const BibleVerses = () => {
       <CandleLight glowAt="50% 50%" intensity={0.18} />
       <div className="mx-auto px-6 max-w-md relative" style={{ zIndex: 2 }}>
         <div className="flex flex-col items-center gap-5">
-          {/* Decorative garden ornament above verse */}
-          <motion.img
-            src="/images/pattern/garden-wildflower.svg"
-            alt=""
-            className="w-16 opacity-40"
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 5, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' }}
-          />
-
           {verses.map((verse, i) => (
             <div key={verse.reference} className="flex flex-col items-center gap-5 w-full">
               <motion.blockquote
@@ -62,12 +53,7 @@ const BibleVerses = () => {
             </div>
           ))}
 
-          {/* Decorative divider */}
-          <div className="flex items-center gap-3 w-full max-w-xs">
-            <div className="flex-1 h-px bg-[#c8961e]/15" />
-            <img src="/images/pattern/garden-rose.svg" alt="" className="w-6 opacity-30" />
-            <div className="flex-1 h-px bg-[#c8961e]/15" />
-          </div>
+          
         </div>
       </div>
     </motion.section>

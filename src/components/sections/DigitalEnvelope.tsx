@@ -75,11 +75,6 @@ export default function DigitalEnvelope() {
           </div>
         </div>
 
-        <div className="mt-12 md:mt-16 flex items-center gap-3">
-          <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(200,150,30,0.45))' }} />
-          <img src="/images/pattern/garden-rose.svg" alt="" className="w-7 h-7 opacity-60" />
-          <div className="flex-1 h-px" style={{ background: 'linear-gradient(to left, transparent, rgba(200,150,30,0.45))' }} />
-        </div>
       </div>
     </section>
   );

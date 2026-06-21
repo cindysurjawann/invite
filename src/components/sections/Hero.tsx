@@ -115,7 +115,7 @@ export default function Hero({ guestName }: HeroProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="text-[#1c3d1c]/85 text-xl mb-6 font-light"
+              className="text-[#1c3d1c]/85 text-xl mb-6"
             >
               Dear {guestName},
             </motion.p>
@@ -125,7 +125,7 @@ export default function Hero({ guestName }: HeroProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="text-[#1c3d1c]/75 text-xl mb-4 font-light tracking-wide"
+            className="text-[#1c3d1c]/75 text-xl mb-4 tracking-wide"
           >
             You are invited to our wedding.
           </motion.p>
@@ -163,9 +163,9 @@ export default function Hero({ guestName }: HeroProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.1 }}
-            className="text-[#c8961e] text-lg mt-4 tracking-wider font-light"
+            className="text-[#c8961e] text-lg mt-4 tracking-wider"
           >
-            {new Date(weddingConfig.event.pemberkatan.date).toLocaleDateString('id-ID', {
+            {new Date(weddingConfig.event.pemberkatan.date).toLocaleDateString('en-ID', {
               day: 'numeric',
               month: 'long',
               year: 'numeric'

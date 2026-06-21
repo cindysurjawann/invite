@@ -13,9 +13,10 @@ interface RSVPProps {
     numberOfGuests: number;
     wishes: string;
   } | null;
+  rsvpEmailSent?: boolean;
 }
 
-export default function RSVP({ guestName, guestId, guestWhatsapp, previousRsvp }: RSVPProps) {
+export default function RSVP({ guestName, guestId, guestWhatsapp, previousRsvp, rsvpEmailSent }: RSVPProps) {
   const [formData, setFormData] = useState({
     name: guestName || '',
     attendance: previousRsvp?.attendance || '',
@@ -50,7 +51,7 @@ export default function RSVP({ guestName, guestId, guestWhatsapp, previousRsvp }
         })
         .eq('id', guestId);
 
-      if (!previousRsvp) {
+      if (formData.attendance === 'Yes' && !rsvpEmailSent) {
         await supabase.functions.invoke('send-rsvp-email', {
           body: {
             guestId,
@@ -61,6 +62,10 @@ export default function RSVP({ guestName, guestId, guestWhatsapp, previousRsvp }
             wishes: formData.wishes,
           },
         });
+        await supabase
+          .from('guests')
+          .update({ send_rsvp: true })
+          .eq('id', guestId);
       }
 
       setSubmitted(true);
@@ -118,7 +123,7 @@ export default function RSVP({ guestName, guestId, guestWhatsapp, previousRsvp }
   };
 
   const scrollBody: React.CSSProperties = {
-    background: 'linear-gradient(to right, #7a3e10 0%, #be7618 1.5%, #dcb048 3.5%, #f5e8c0 7%, #fdf8ee 13%, #fefcf2 50%, #fdf8ee 87%, #f5e8c0 93%, #dcb048 96.5%, #be7618 98.5%, #7a3e10 100%)',
+    background: 'linear-gradient(to right, #7a3e10 0%, #b87820 1.5%, #d4aa50 3.5%, #f2e8cc 7%, #fdf9f2 13%, #fffffb 50%, #fdf9f2 87%, #f2e8cc 93%, #d4aa50 96.5%, #b87820 98.5%, #7a3e10 100%)',
     padding: '2.5rem 3rem',
     position: 'relative',
     zIndex: 1,
@@ -167,10 +172,10 @@ export default function RSVP({ guestName, guestId, guestWhatsapp, previousRsvp }
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <label style={labelStyle}>Your Name</label>
+                  <label style={labelStyle}>Name</label>
                   <input
                     type="text"
-                    required
+                    disabled
                     style={inputStyle}
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -183,12 +188,18 @@ export default function RSVP({ guestName, guestId, guestWhatsapp, previousRsvp }
                     required
                     style={{ ...inputStyle, cursor: 'pointer' }}
                     value={formData.attendance}
-                    onChange={(e) => setFormData({ ...formData, attendance: e.target.value })}
+                    onChange={(e) => {
+                      const attendance = e.target.value;
+                      setFormData({
+                        ...formData,
+                        attendance,
+                        numberOfGuests: attendance === 'No' ? 0 : formData.numberOfGuests || 1,
+                      });
+                    }}
                   >
                     <option value="" style={{ background: '#fdf8ef' }}>Select...</option>
                     <option value="Yes" style={{ background: '#fdf8ef' }}>Yes, I will attend</option>
                     <option value="No" style={{ background: '#fdf8ef' }}>Sorry, I can&apos;t attend</option>
-                    <option value="Maybe" style={{ background: '#fdf8ef' }}>Maybe</option>
                   </select>
                 </div>
 
@@ -196,10 +207,18 @@ export default function RSVP({ guestName, guestId, guestWhatsapp, previousRsvp }
                   <label style={labelStyle}>Number of Guests</label>
                   <select
                     required
-                    style={{ ...inputStyle, cursor: 'pointer' }}
+                    disabled={formData.attendance === 'No'}
+                    style={{
+                      ...inputStyle,
+                      cursor: formData.attendance === 'No' ? 'not-allowed' : 'pointer',
+                      opacity: formData.attendance === 'No' ? 0.5 : 1,
+                    }}
                     value={formData.numberOfGuests}
                     onChange={(e) => setFormData({ ...formData, numberOfGuests: parseInt(e.target.value) })}
                   >
+                    {formData.attendance === 'No' && (
+                      <option value={0} style={{ background: '#fdf8ef' }}>0 pax</option>
+                    )}
                     <option value={1} style={{ background: '#fdf8ef' }}>1 pax</option>
                     <option value={2} style={{ background: '#fdf8ef' }}>2 pax</option>
                   </select>
@@ -247,11 +266,6 @@ export default function RSVP({ guestName, guestId, guestWhatsapp, previousRsvp }
           </div>
         </motion.div>
 
-        <div className="mt-16 flex items-center gap-3">
-          <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(200,150,30,0.45))' }} />
-          <img src="/images/pattern/garden-wildflower.svg" alt="" className="w-7 h-7 opacity-60" />
-          <div className="flex-1 h-px" style={{ background: 'linear-gradient(to left, transparent, rgba(200,150,30,0.45))' }} />
-        </div>
       </div>
     </section>
   );

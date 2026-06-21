@@ -8,6 +8,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import BibleVerses from '../sections/BibleVerses';
 import SectionNav from '../navigation/SectionNav';
 import FloatingFlowers from '../ui/FloatingFlowers';
+import SectionDivider from '../ui/SectionDivider';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -115,7 +116,7 @@ export default function MainLayout({ children, guestName, sectionIds }: MainLayo
               className="absolute -bottom-3 -right-3 w-12 opacity-40 pointer-events-none rotate-180"
             />
 
-            <h3 className="text-lg text-[#1c3d1c]/80 mb-4 font-light tracking-wider">
+            <h3 className="text-lg text-[#1c3d1c]/80 mb-4 tracking-wider">
               {guestName ? `Dear ${guestName},` : 'You are invited to our wedding.'}
             </h3>
             <h1 className="text-4xl md:text-5xl font-serif text-[#1c3d1c] mb-6 leading-tight">
@@ -148,7 +149,7 @@ export default function MainLayout({ children, guestName, sectionIds }: MainLayo
               </span>
             </motion.button>
             {guestName && (
-              <p className="text-xs text-[#1c3d1c]/50 mt-3 font-light italic">
+              <p className="text-xs text-[#1c3d1c]/70 mt-3 italic font-medium">
                 We apologize if there is any error in the spelling of your name.
               </p>
             )}
@@ -184,11 +185,22 @@ export default function MainLayout({ children, guestName, sectionIds }: MainLayo
 
         {/* Main Content */}
         <div className="relative z-30">
-          {React.Children.map(children, (child, index) => (
-            <section id={sectionIds?.[index]} className="relative">
-              {child}
-            </section>
+          {React.Children.toArray(children).map((child, index) => (
+            <React.Fragment key={index}>
+              {index > 0 && <SectionDivider />}
+              <motion.section
+                id={sectionIds?.[index]}
+                className="relative"
+                initial={{ opacity: 0, y: 48, scale: 0.97 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: false, amount: 0.08 }}
+                transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+              >
+                {child}
+              </motion.section>
+            </React.Fragment>
           ))}
+          <SectionDivider />
           <div>
             <BibleVerses />
           </div>

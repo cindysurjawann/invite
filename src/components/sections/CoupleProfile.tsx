@@ -123,17 +123,8 @@ export default function CoupleProfile() {
       <CandleLight glowAt="75% 25%" intensity={0.16} />
       <div className="container mx-auto px-4 relative" style={{ zIndex: 2 }}>
         <div className="text-center mb-16">
-          <div
-            className="relative rounded-lg p-6 max-w-2xl mx-auto"
-            style={{
-              background: 'rgba(255, 255, 255, 0.85)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(200, 150, 30, 0.25)',
-            }}
-          >
-            <p className="text-[#1c3d1c] text-lg font-medium leading-relaxed">By the grace of God and with thankful hearts</p>
-            <p className="mt-4 text-[#1c3d1c]/80 leading-relaxed">We would like to invite you to share in the joy of our wedding as we celebrate the sacred union of marriage.</p>
-          </div>
+          <h2 className="text-4xl font-serif mb-4 text-white">By the grace of God and with thankful hearts</h2>
+          <p className="text-white/80">We would like to invite you to share in the joy of our wedding as we celebrate the sacred union of marriage.</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-16 max-w-5xl mx-auto">

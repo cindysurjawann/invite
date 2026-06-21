@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react';
 import AOS from 'aos';
 import { useRouter } from 'next/router';
 import { supabase } from '@/lib/supabase';
+import { weddingConfig } from '@/config/wedding-config';
 
 const ADMIN_GUEST_ID = '3512df82-6520-4c99-9d74-e07eddcef977';
 
@@ -31,6 +32,7 @@ const Home: NextPage = () => {
     numberOfGuests: number;
     wishes: string;
   } | null>(null);
+  const [rsvpEmailSent, setRsvpEmailSent] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -50,7 +52,7 @@ const Home: NextPage = () => {
 
       supabase
         .from('guests')
-        .select('name, access_count, rsvp_attendance, rsvp_guests_count, rsvp_wishes, rsvp_whatsapp, rsvp_submitted_at')
+        .select('name, access_count, rsvp_attendance, rsvp_guests_count, rsvp_wishes, rsvp_whatsapp, rsvp_submitted_at, send_rsvp')
         .eq('id', queryGuestId)
         .single()
         .then(({ data }) => {
@@ -62,6 +64,7 @@ const Home: NextPage = () => {
           setGuestName(data.name);
           setGuestId(queryGuestId);
           setGuestWhatsapp(data.rsvp_whatsapp ?? '');
+          setRsvpEmailSent(data.send_rsvp ?? false);
           if (data.rsvp_submitted_at) {
             setPreviousRsvp({
               attendance: data.rsvp_attendance ?? '',
@@ -117,6 +120,9 @@ const Home: NextPage = () => {
     );
   }
 
+  const liveStreamEnabled = weddingConfig.specialFeatures.liveStreaming.enabled;
+  const giftRegistryEnabled = weddingConfig.specialFeatures.giftRegistry.enabled;
+
   const sectionIds = [
     'section-hero',
     'section-couple',
@@ -124,11 +130,11 @@ const Home: NextPage = () => {
     'section-event',
     'section-story',
     'section-gallery',
-    'section-livestream',
+    ...(liveStreamEnabled ? ['section-livestream'] : []),
     'section-envelope',
     'section-rsvp',
     'section-guestbook',
-    'section-registry',
+    ...(giftRegistryEnabled ? ['section-registry'] : []),
   ];
 
   return (
@@ -140,11 +146,11 @@ const Home: NextPage = () => {
         <EventDetails />
         <StoryTimeline />
         <Gallery />
-        <LiveStreaming />
+        {liveStreamEnabled && <LiveStreaming />}
         <DigitalEnvelope />
-        <RSVP guestName={guestName} guestId={guestId} guestWhatsapp={guestWhatsapp} previousRsvp={previousRsvp} />
+        <RSVP guestName={guestName} guestId={guestId} guestWhatsapp={guestWhatsapp} previousRsvp={previousRsvp} rsvpEmailSent={rsvpEmailSent} />
         <GuestBook />
-        <GiftRegistry />
+        {giftRegistryEnabled && <GiftRegistry />}
       </MainLayout>
     </ThemeProvider>
   );

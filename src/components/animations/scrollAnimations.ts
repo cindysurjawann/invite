@@ -61,6 +61,6 @@ export const slideInFromRight: Variants = {
 };
 
 export const viewportSettings = {
-  once: true,
+  once: false,
   amount: 0.3
 };
